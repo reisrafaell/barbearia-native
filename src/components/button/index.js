@@ -4,9 +4,9 @@ import {
   
 } from "./styles";
 
-const ButtonComponent = ({ onPress, text }) => {
+const ButtonComponent = ({ onPress, text, w, m }) => {
   return (
-    <Button onPress={onPress}>
+    <Button w={w} m={m} onPress={onPress}>
       <Text>{text}</Text>
      
     </Button>

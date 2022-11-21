@@ -1,10 +1,11 @@
 import styled from "styled-components/native";
 
 export const Button = styled.TouchableOpacity`
-  width: 80%;
+  width: ${(props) => props.w || "80%"};
+  margin-top: ${(props) => props.m || "0"};
   border-radius: 20px;
   height: 50px;
-  background: #106D95 ;
+  background: #106d95;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -13,5 +14,4 @@ export const Button = styled.TouchableOpacity`
 export const Text = styled.Text`
   color: #fff;
   font-size: 25px;
-  
 `;

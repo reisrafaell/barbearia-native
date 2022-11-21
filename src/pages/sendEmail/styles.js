@@ -7,13 +7,13 @@ export const Container = styled.View`
   align-items: center;
 `;
 export const ImageComponet = styled.Image`
-width: 250px;
-height: 260px;
+width: 260px;
+height: 270px;
 
 `
 export const TitleComponet = styled.Text`
   color: ${props=> props.color || '#fff'};
-  padding: 5px 0;
+  padding: 20px 0;
   font-size: 30px;
   text-align: center;
 `;
@@ -21,17 +21,6 @@ export const TitleComponet = styled.Text`
 export const TextComponet = styled.Text`
   color:  ${props=> props.color || '#fff'};
   font-size: 20px;
+  margin: 40px;
   text-align: center;
-  margin-left: ${props=> props.m || "0"};
-  margin-bottom: ${props=> props.mb || "5px"};
-`;
-
-export const Button = styled.TouchableOpacity`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  width: 100%;
-  margin-top: 30px;
-  padding: 0 20px;
 `;

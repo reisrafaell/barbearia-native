@@ -17,7 +17,7 @@ import {
   Button
 } from "./styles";
 
-const Login = () => {
+const LoginSecondary = () => {
   const { loginUser, error } = useContext(AuthContex);
 
   const navigation = useNavigation();
@@ -38,7 +38,7 @@ const Login = () => {
         
         <ImageComponet source={require("../../assets/logo.png")} />
         <TitleComponet>Barbearia Rei Do Corte</TitleComponet>
-        <TextComponet>Já é cliente ? Faça Login</TextComponet>
+        <TextComponet mb={'20px'}>Área do Barbeiro</TextComponet>
         {error && (
           <TextComponet color="#c60d00">
             Usuário ou senha incorreto
@@ -58,20 +58,11 @@ const Login = () => {
           type="password"
           label="Senha"
           placeholder="******"
-        ></InputComponent>
-        <LinkComponent
-          textBefore="Não tem conta?"
-          link="Cadrastre-se"
-          onPress={() => navigation.navigate("Registration")}
-        ></LinkComponent>
-        <LinkComponent
-          link="Esquceu a senha?"
-          onPress={() => navigation.navigate("Reset")}
-        ></LinkComponent>
+        ></InputComponent>       
         <ButtonComponent onPress={handleLogin} text="Entrar"></ButtonComponent>
       </Container>
     </BackgroundLinear>
   );
 };
 
-export default Login;
+export default LoginSecondary;

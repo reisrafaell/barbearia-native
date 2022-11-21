@@ -30,6 +30,7 @@ export const Input = styled.TextInput`
   height: 50px;
   padding: 10px 10px 10px 45px;
   letter-spacing: 1px;
+  border: ${props=> props.showError ? "1px solid #c60d00" : "1px solid #fff"} ;
 `;
 export const Button = styled.TouchableOpacity`
  
