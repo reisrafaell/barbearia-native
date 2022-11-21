@@ -60,6 +60,14 @@ export const ContentHeader = styled.View`
   justify-content: space-between;
   background-color: #cbefff;
 `;
+export const ContainerButtons = styled.View`
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #cbefff;
+`;
 export const ContentMainServices = styled.View`
   height: 160px;
   background-color: #fff;
@@ -67,13 +75,16 @@ export const ContentMainServices = styled.View`
 export const DateTimePickerModal = styled.View`
   width: 100%;
   display: ${(props) => (props.display ? "flex" : "none")};
-  height: 500px;
+  height: 600px;
+  padding: 0 15px;
   position: absolute;
   top: 100px;
   z-index: 1;
   background-color: #cbefff;
 `;
 export const ContentMain = styled.View``;
+export const ContainerHours = styled.View`
+width:100%`;
 export const TabBottom = styled.View`
   display: flex;
   flex-direction: row;
@@ -88,9 +99,11 @@ export const TabBottom = styled.View`
 
 export const ButtonHandle = styled.TouchableOpacity`
   background-color: #106d95;
+  background-color: ${(props) => (props.selected ? "#4dc6fa" : "#106D95")};
   padding: 10px;
   border-radius: 10px;
   margin: 30px 0 20px;
+  min-width: 110px;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -21,7 +21,6 @@ const Route = () => {
     <NavigationContainer>
       <AuthProvider>
         <Stack.Navigator>
-          
         <Stack.Screen
             name="Schedule"
             options={{
@@ -29,6 +28,15 @@ const Route = () => {
             }}
             component={Schedule}
           />
+        <Stack.Screen
+            name="Login"
+            options={{
+              headerShown: false,
+            }}
+            component={Login}
+          />
+          
+       
           <Stack.Screen
             name="Main"
             options={{
@@ -36,13 +44,7 @@ const Route = () => {
             }}
             component={Main}
           />
-          <Stack.Screen
-            name="Login"
-            options={{
-              headerShown: false,
-            }}
-            component={Login}
-          />
+         
           <Stack.Screen
             name="LoginSecondary"
             options={{

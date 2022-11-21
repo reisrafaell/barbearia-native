@@ -4,28 +4,9 @@ import { BackgroundLinear } from "./gradient";
 import ButtonComponent from "../../components/button";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { AuthContex } from "../../contexts/auth";
-
 import { collection, addDoc } from "firebase/firestore";
 
-import {
-  Container,
-  ImageComponet,
-  TextComponet,
-  TitleComponet,
-  TextButtonServices,
-  ButtonHandle,
-  Content,
-  Text,
-  Input,
-  Button,
-  ContentMain,
-  ContentHeader,
-  TextHeader,
-  ContentMainServices,
-  TextServices,
-  ButtonServices,
-  DateTimePickerModal,
-} from "./styles";
+import * as S from "./styles";
 import { database } from "../../config/firebase";
 
 const Schedule = () => {
@@ -33,18 +14,11 @@ const Schedule = () => {
   const { services, name } = useContext(AuthContex);
   const [time, setTime] = useState("");
   const [date, setDate] = useState();
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [nameCliente, setName] = useState();
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(true);
+  const [dateSelected, setDateSelected] = useState("");
+  const [hourSelected, setHourSelected] = useState("");
 
-  const [tuesday, setTuesday] = useState([
-    { one: true, two: true, three: true, four: true, five: true, six: true }
-  ]);
-  // const [tuesday, setTuesday] = useState([
-  //   {tuesday  : {hora: {one: true, two: true, three: true, four: true, five: true, six: true}}},
-  //   {thursday   : {hora: {one: true, two: true, three: true, four: true, five: true, six: true}}},
-  //   {friday   : {hora: {one: true, two: true, three: true, four: true, five: true, six: true}}}
-  // ]);
-console.log(tuesday)
+  const [nameCliente, setName] = useState();
 
   const hideDatePicker = () => {
     setDatePickerVisibility(false);
@@ -55,7 +29,11 @@ console.log(tuesday)
     hideDatePicker();
   };
 
+  useEffect(() => {
+ setDate({dia: dateSelected, hora: hourSelected})
+  }, [dateSelected,hourSelected])
   
+
   const userCollection = collection(database, "Tasks");
 
   const handleSubmit = async () => {
@@ -78,120 +56,157 @@ console.log(tuesday)
   };
   return (
     <BackgroundLinear>
-      <DateTimePickerModal display={isDatePickerVisible}>
-        <Button onPress={() => setDatePickerVisibility(!true)}>
+      <S.DateTimePickerModal display={isDatePickerVisible}>
+        <S.Button onPress={() => setDatePickerVisibility(!true)}>
           <Icon name="close" size={30} color="#106d95" />
-          <TextComponet m={"10px"} mb={"0"} color="#106d95">
+          <S.TextComponet m={"10px"} mb={"0"} color="#106d95">
             Fechar{" "}
-          </TextComponet>
-        </Button>
-        <TextHeader>Selecionar Horário</TextHeader>
+          </S.TextComponet>
+        </S.Button>
+        <S.TextHeader>Selecionar Horário disponível</S.TextHeader>
 
-        <ButtonServices
-          onPress={() => {
-            setDatePickerVisibility(!true)
-            setTuesday((prev) => {
-              return { ...prev, one: !true };
-            });
-          }}
-        >
-          <TextButtonServices>08:00</TextButtonServices>
-          <TextButtonServices>Selecionar</TextButtonServices>
-        </ButtonServices>
-        <ButtonServices
-          onPress={() => {
-            setDatePickerVisibility(!true)
-            setTuesday((prev) => {
-              return { ...prev, two: !true  };
-            });
-          }}
-        >
-          <TextButtonServices>10:00</TextButtonServices>
-          <TextButtonServices>Selecionar</TextButtonServices>
-        </ButtonServices>
-        <ButtonServices
-          onPress={() => {
-            setDatePickerVisibility(!true)
-            setTuesday((prev) => {
-              return { ...prev, three:!true  };
-            });
-          }}
-        >
-          <TextButtonServices>12:00</TextButtonServices>
-          <TextButtonServices>Selecionar</TextButtonServices>
-        </ButtonServices>
-        <ButtonServices
-          onPress={() => {
-            setDatePickerVisibility(!true)
-            setTuesday((prev) => {
-              return { ...prev, four: !true  };
-            });
-          }}
-        >
-          <TextButtonServices>14:00</TextButtonServices>
-          <TextButtonServices>Selecionar</TextButtonServices>
-        </ButtonServices>
-        <ButtonServices
-          onPress={() => {
-            setDatePickerVisibility(!true)
-            setTuesday((prev) => {
-              return { ...prev, five: !true  };
-            });
-          }}
-        >
-          <TextButtonServices>16:00</TextButtonServices>
-          <TextButtonServices>Selecionar</TextButtonServices>
-        </ButtonServices>
-        <ButtonServices
-          onPress={() => {
-            setDatePickerVisibility(!true)
-            setTuesday((prev) => {
-              return { ...prev, six:!true  };
-            });
-          }}
-        >
-          <TextButtonServices>17:00</TextButtonServices>
-          <TextButtonServices>Selecionar</TextButtonServices>
-        </ButtonServices>
-      </DateTimePickerModal>
+        <S.ContainerButtons>
+          <S.ButtonHandle
+            onPress={() => setDateSelected("segunda")}
+            selected={dateSelected == "segunda" ? true : false}
+          >
+            <S.TextButtonServices>Segunda</S.TextButtonServices>
+          </S.ButtonHandle>
+          <S.ButtonHandle
+            onPress={() => setDateSelected("quarta")}
+            selected={dateSelected == "quarta" ? true : false}
+          >
+            <S.TextButtonServices>Quarta</S.TextButtonServices>
+          </S.ButtonHandle>
+          <S.ButtonHandle
+            onPress={() => setDateSelected("sexta")}
+            selected={dateSelected == "sexta" ? true : false}
+          >
+            <S.TextButtonServices>Sexta</S.TextButtonServices>
+          </S.ButtonHandle>
+        </S.ContainerButtons>
 
-      <Container>
-        <TitleComponet>Agendamento</TitleComponet>
+        {dateSelected === "segunda" ? (
+          <S.ContainerHours>
+            <S.ButtonServices
+              onPress={() => {
+                setHourSelected("08:00");
+               
+              }}
+              selected={hourSelected === "08:00" ? true : false}
+            >
+              <S.TextButtonServices>08:00</S.TextButtonServices>
+              <S.TextButtonServices>Selecionar</S.TextButtonServices>
+            </S.ButtonServices>
 
-        <Button onPress={() => navigation.navigate("Home")}>
+            <S.ButtonServices
+              onPress={() => {
+                setHourSelected("10:00");
+                
+              }}
+              selected={hourSelected === "10:00" ? true : false}
+            >
+              <S.TextButtonServices>10:00</S.TextButtonServices>
+              <S.TextButtonServices>Selecionar</S.TextButtonServices>
+            </S.ButtonServices>
+            <S.ButtonServices
+              onPress={() => {
+                setHourSelected("12:00");
+               
+              }}
+              selected={hourSelected === "12:00" ? true : false}
+            >
+              <S.TextButtonServices>12:00</S.TextButtonServices>
+              <S.TextButtonServices>Selecionar</S.TextButtonServices>
+            </S.ButtonServices>
+            <S.ButtonServices
+              onPress={() => {
+                setHourSelected("14:00");
+              
+              }}
+              selected={hourSelected === "14:00" ? true : false}
+            >
+              <S.TextButtonServices>14:00</S.TextButtonServices>
+              <S.TextButtonServices>Selecionar</S.TextButtonServices>
+            </S.ButtonServices>
+            <S.ButtonServices
+              onPress={() => {
+                setHourSelected("16:00");
+               
+              }}
+              selected={hourSelected === "16:00" ? true : false}
+            >
+              <S.TextButtonServices>16:00</S.TextButtonServices>
+              <S.TextButtonServices>Selecionar</S.TextButtonServices>
+            </S.ButtonServices>
+            <S.ButtonServices
+              onPress={() => {
+                setHourSelected("17:00");
+                
+              }}
+              selected={hourSelected === "17:00" ? true : false}
+            >
+              <S.TextButtonServices>17:00</S.TextButtonServices>
+              <S.TextButtonServices>Selecionar</S.TextButtonServices>
+            </S.ButtonServices>
+          </S.ContainerHours>
+        ) : dateSelected == "quarta" ? (
+          <S.ContainerHours>
+            <S.TextButtonServices>quarta</S.TextButtonServices>
+          </S.ContainerHours>
+        ) : (
+          <S.ContainerHours>
+            <S.TextButtonServices>sexta</S.TextButtonServices>
+          </S.ContainerHours>
+        )}
+
+        <S.ButtonHandle onPress={() =>{
+          console.log(date)
+          setDatePickerVisibility(!true)}}>
+          <S.TextButtonServices>Confirmar</S.TextButtonServices>
+        </S.ButtonHandle>
+      </S.DateTimePickerModal>
+
+      <S.Container>
+        <S.TitleComponet>Agendamento</S.TitleComponet>
+
+        <S.Button onPress={() => navigation.navigate("Home")}>
           <Icon name="arrow-left" size={30} color="#fff" />
-          <TextComponet color="#fff">Voltar </TextComponet>
-        </Button>
-        <ImageComponet source={require("../../assets/logo.png")} />
-        <Content>
-          <ButtonHandle onPress={() => setDatePickerVisibility(!false)}>
-            <TextButtonServices>Selecionar Data e Hora</TextButtonServices>
-          </ButtonHandle>
+          <S.TextComponet color="#fff">Voltar </S.TextComponet>
+        </S.Button>
+        <S.ImageComponet source={require("../../assets/logo.png")} />
+        <S.Content>
+          <S.ButtonHandle onPress={() => setDatePickerVisibility(!false)}>
+            <S.TextButtonServices>Selecionar Data e Hora</S.TextButtonServices>
+          </S.ButtonHandle>
 
-          <ContentMainServices>
-            <ContentHeader>
-              <TextHeader>Serviços selecionados</TextHeader>
+          <S.ContentMainServices>
+            <S.ContentHeader>
+              <S.TextHeader>Serviços selecionados</S.TextHeader>
               <Icon name="arrow-down" size={20} color="#fff" />
-            </ContentHeader>
-            {services.corte && <TextServices>Corte Masculino</TextServices>}
-            {services.limpeza && <TextServices>Limpeza de Rosto</TextServices>}
-            {services.sombrancelha && (
-              <TextServices>Sombrancelha </TextServices>
+            </S.ContentHeader>
+            {services.corte && <S.TextServices>Corte Masculino</S.TextServices>}
+            {services.limpeza && (
+              <S.TextServices>Limpeza de Rosto</S.TextServices>
             )}
-            {services.barba && <TextServices>Barba </TextServices>}
-          </ContentMainServices>
-          <ContentMain>
-            <Text>Nome do cliente</Text>
-            <Input
+            {services.sombrancelha && (
+              <S.TextServices>Sombrancelha </S.TextServices>
+            )}
+            {services.barba && <S.TextServices>Barba </S.TextServices>}
+          </S.ContentMainServices>
+          <S.ContentMain>
+            <S.Text>Nome do cliente</S.Text>
+            <S.Input
               placeholder="none"
               onChangeText={(value) => setName(value)}
-            ></Input>
-          </ContentMain>
-          <ButtonHandle onPress={handleSubmit}>
-            <TextButtonServices>Finalizar Agendamento</TextButtonServices>
-          </ButtonHandle>
-        </Content>
-      </Container>
+            ></S.Input>
+             <S.Text>Data agendado: {`${dateSelected} - ${hourSelected} `}</S.Text>
+          </S.ContentMain>
+          <S.ButtonHandle onPress={handleSubmit}>
+            <S.TextButtonServices>Finalizar Agendamento</S.TextButtonServices>
+          </S.ButtonHandle>
+        </S.Content>
+      </S.Container>
     </BackgroundLinear>
   );
 };
