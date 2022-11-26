@@ -3,20 +3,37 @@ import { useNavigation } from "@react-navigation/native";
 import { BackgroundLinear } from "./gradient";
 import ButtonComponent from "../../components/button";
 import Icon from "react-native-vector-icons/FontAwesome";
+import firestore from '@react-native-firebase/firestore'
 import { AuthContex } from "../../contexts/auth";
-import { collection, addDoc } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  updateDoc,
+  doc,
+  onSnapshot
+} from "firebase/firestore";
 
 import * as S from "./styles";
 import { database } from "../../config/firebase";
+import { async } from "@firebase/util";
 
 const Schedule = () => {
   const navigation = useNavigation();
+  const userCollection = collection(database, "Tasks");
+  const userCollectionAgenta = collection(database, "Agenda");
+  const [tasks, setTasks] = useState([]);
+  const [agenda, setAgenda] = useState([]);
   const { services, name } = useContext(AuthContex);
-  const [time, setTime] = useState("");
   const [date, setDate] = useState();
   const [isDatePickerVisible, setDatePickerVisibility] = useState(true);
   const [dateSelected, setDateSelected] = useState("");
   const [hourSelected, setHourSelected] = useState("");
+  const [atualDate, setAtualDate] = useState("");
+  const [idDoc, setIdDoc] = useState("");
+  let segunda = [];
+  let quarta = [];
+  let sexta = [];
 
   const [nameCliente, setName] = useState();
 
@@ -29,12 +46,49 @@ const Schedule = () => {
     hideDatePicker();
   };
 
+  const UpdateTask = async () => {
+    const docRef = doc(database, "Agenda", idDoc);
+    await updateDoc(docRef, {
+      dia: dateSelected,
+      hora: hourSelected,
+      id: idDoc,
+      selecionado: true,
+    });
+  };
+
   useEffect(() => {
- setDate({dia: dateSelected, hora: hourSelected})
-  }, [dateSelected,hourSelected])
+    setDate({ dia: dateSelected, hora: hourSelected });
+  }, [dateSelected, hourSelected]);
+
+  useEffect(() => {
+    const newDate = new Date().getDate();
+    setAtualDate(newDate);
+    const DataOn = onSnapshot(doc(database, "cities", "SF"),(doc)=>{
+      console.log('atual', doc.data())
+    })
+  }, []);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const data = await getDocs(userCollection);
+      //  console.log(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      setTasks(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    };
+    const getAgenda = async () => {
+      const data = await getDocs(userCollectionAgenta);
+      //  console.log(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      setAgenda(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    };
+    getAgenda();
+    getUser();
+  }, []);
+
+
+  useEffect(() => {
+    const Data = firestore()
+  }, [])
   
 
-  const userCollection = collection(database, "Tasks");
 
   const handleSubmit = async () => {
     if (date && nameCliente && services) {
@@ -42,7 +96,15 @@ const Schedule = () => {
         idClientedb: name,
         namedb: nameCliente,
         activedb: true,
-        datedb: date,
+        datedb: dateSelected,
+        hourDb: [
+          { hora: "08:00", selecionado: false },
+          { hora: "10:00", selecionado: false },
+          { hora: "13:00", selecionado: false },
+          { hora: "15:00", selecionado: false },
+          { hora: "17:00", selecionado: false },
+        ],
+        atualDate: atualDate,
         cortedb: services.corte,
         barbadb: services.barba,
         sombrancelhadb: services.sombrancelha,
@@ -54,6 +116,11 @@ const Schedule = () => {
       alert("Preencha todos os campos!");
     }
   };
+
+  agenda.map((v) => {
+    console.log("v", v);
+  });
+
   return (
     <BackgroundLinear>
       <S.DateTimePickerModal display={isDatePickerVisible}>
@@ -88,81 +155,84 @@ const Schedule = () => {
 
         {dateSelected === "segunda" ? (
           <S.ContainerHours>
-            <S.ButtonServices
-              onPress={() => {
-                setHourSelected("08:00");
-               
-              }}
-              selected={hourSelected === "08:00" ? true : false}
-            >
-              <S.TextButtonServices>08:00</S.TextButtonServices>
-              <S.TextButtonServices>Selecionar</S.TextButtonServices>
-            </S.ButtonServices>
-
-            <S.ButtonServices
-              onPress={() => {
-                setHourSelected("10:00");
-                
-              }}
-              selected={hourSelected === "10:00" ? true : false}
-            >
-              <S.TextButtonServices>10:00</S.TextButtonServices>
-              <S.TextButtonServices>Selecionar</S.TextButtonServices>
-            </S.ButtonServices>
-            <S.ButtonServices
-              onPress={() => {
-                setHourSelected("12:00");
-               
-              }}
-              selected={hourSelected === "12:00" ? true : false}
-            >
-              <S.TextButtonServices>12:00</S.TextButtonServices>
-              <S.TextButtonServices>Selecionar</S.TextButtonServices>
-            </S.ButtonServices>
-            <S.ButtonServices
-              onPress={() => {
-                setHourSelected("14:00");
-              
-              }}
-              selected={hourSelected === "14:00" ? true : false}
-            >
-              <S.TextButtonServices>14:00</S.TextButtonServices>
-              <S.TextButtonServices>Selecionar</S.TextButtonServices>
-            </S.ButtonServices>
-            <S.ButtonServices
-              onPress={() => {
-                setHourSelected("16:00");
-               
-              }}
-              selected={hourSelected === "16:00" ? true : false}
-            >
-              <S.TextButtonServices>16:00</S.TextButtonServices>
-              <S.TextButtonServices>Selecionar</S.TextButtonServices>
-            </S.ButtonServices>
-            <S.ButtonServices
-              onPress={() => {
-                setHourSelected("17:00");
-                
-              }}
-              selected={hourSelected === "17:00" ? true : false}
-            >
-              <S.TextButtonServices>17:00</S.TextButtonServices>
-              <S.TextButtonServices>Selecionar</S.TextButtonServices>
-            </S.ButtonServices>
+            {agenda.map(
+              (value, id) =>
+                value.dia === "segunda" &&
+                (value.selecionado ? (
+                  <S.ButtonServicesSecondary>
+                    <S.TextButtonServices>{value.hora}</S.TextButtonServices>
+                    <S.TextButtonServices>Indisponível</S.TextButtonServices>
+                  </S.ButtonServicesSecondary>
+                ) : (
+                  <S.ButtonServices
+                    onPress={() => {
+                      setHourSelected(value.hora);
+                      setIdDoc(value.id);
+                    }}
+                    selected={hourSelected === value.hora ? true : false}
+                  >
+                    <S.TextButtonServices>{value.hora}</S.TextButtonServices>
+                    <S.TextButtonServices>Selecionar</S.TextButtonServices>
+                  </S.ButtonServices>
+                ))
+            )}
           </S.ContainerHours>
         ) : dateSelected == "quarta" ? (
           <S.ContainerHours>
-            <S.TextButtonServices>quarta</S.TextButtonServices>
+            {agenda.map(
+              (value, id) =>
+                value.dia === "quarta" &&
+                (value.selecionado ? (
+                  <S.ButtonServicesSecondary>
+                    <S.TextButtonServices>{value.hora}</S.TextButtonServices>
+                    <S.TextButtonServices>Indisponível</S.TextButtonServices>
+                  </S.ButtonServicesSecondary>
+                ) : (
+                  <S.ButtonServices
+                    onPress={() => {
+                      setHourSelected(value.hora);
+                      setIdDoc(value.id);
+                    }}
+                    selected={hourSelected === value.hora ? true : false}
+                  >
+                    <S.TextButtonServices>{value.hora}</S.TextButtonServices>
+                    <S.TextButtonServices>Selecionar</S.TextButtonServices>
+                  </S.ButtonServices>
+                ))
+            )}
           </S.ContainerHours>
         ) : (
           <S.ContainerHours>
-            <S.TextButtonServices>sexta</S.TextButtonServices>
+             {agenda.map(
+              (value, id) =>
+                value.dia === "sexta" &&
+                (value.selecionado ? (
+                  <S.ButtonServicesSecondary>
+                    <S.TextButtonServices>{value.hora}</S.TextButtonServices>
+                    <S.TextButtonServices>Indisponível</S.TextButtonServices>
+                  </S.ButtonServicesSecondary>
+                ) : (
+                  <S.ButtonServices
+                    onPress={() => {
+                      setHourSelected(value.hora);
+                      setIdDoc(value.id);
+                    }}
+                    selected={hourSelected === value.hora ? true : false}
+                  >
+                    <S.TextButtonServices>{value.hora}</S.TextButtonServices>
+                    <S.TextButtonServices>Selecionar</S.TextButtonServices>
+                  </S.ButtonServices>
+                ))
+            )}
           </S.ContainerHours>
         )}
 
-        <S.ButtonHandle onPress={() =>{
-          console.log(date)
-          setDatePickerVisibility(!true)}}>
+        <S.ButtonHandle
+          onPress={() => {
+            console.log(date);
+            setDatePickerVisibility(!true);
+          }}
+        >
           <S.TextButtonServices>Confirmar</S.TextButtonServices>
         </S.ButtonHandle>
       </S.DateTimePickerModal>
@@ -200,9 +270,11 @@ const Schedule = () => {
               placeholder="none"
               onChangeText={(value) => setName(value)}
             ></S.Input>
-             <S.Text>Data agendado: {`${dateSelected} - ${hourSelected} `}</S.Text>
+            <S.Text>
+              Data agendado: {`${dateSelected} - ${hourSelected} `}
+            </S.Text>
           </S.ContentMain>
-          <S.ButtonHandle onPress={handleSubmit}>
+          <S.ButtonHandle onPress={UpdateTask}>
             <S.TextButtonServices>Finalizar Agendamento</S.TextButtonServices>
           </S.ButtonHandle>
         </S.Content>

@@ -17,8 +17,9 @@ const AuthProvider = ({ children }) => {
         setUser(value.user.uid);
         if( value.user.uid == "6IpwJSBsMdW5I9sKvuPww1Jcnmv1"){
           console.log("okkkk")
+          navigation.navigate("List");
         }
-        navigation.navigate("List");
+        navigation.navigate("Home");
       })
       .catch((error) => {
         setError(true);

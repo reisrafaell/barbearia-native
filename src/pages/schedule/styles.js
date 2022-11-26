@@ -9,7 +9,7 @@ export const Container = styled.View`
 `;
 
 export const TextComponet = styled.Text`
-  color: ${props=> props.color || "#ff"};
+  color: ${(props) => props.color || "#ff"};
   align-self: flex-start;
   font-size: 24px;
   margin: 20px;
@@ -84,7 +84,8 @@ export const DateTimePickerModal = styled.View`
 `;
 export const ContentMain = styled.View``;
 export const ContainerHours = styled.View`
-width:100%`;
+  width: 100%;
+`;
 export const TabBottom = styled.View`
   display: flex;
   flex-direction: row;
@@ -171,6 +172,15 @@ export const ButtonServices = styled.TouchableOpacity`
   justify-content: space-between;
 
   background-color: ${(props) => (props.selected ? "#106D95" : "#4dc6fa")};
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 5px;
+`;
+export const ButtonServicesSecondary = styled.TouchableOpacity`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color:#FF1515;
   padding: 10px;
   border-radius: 10px;
   margin-bottom: 5px;
