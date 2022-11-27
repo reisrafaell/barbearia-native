@@ -35,6 +35,7 @@ const Login = () => {
       if (valuePassword && valueUser) {
         setEmail(valueUser);
         setPassword(valuePassword);
+     
       }
     };
     handleShowValues();
