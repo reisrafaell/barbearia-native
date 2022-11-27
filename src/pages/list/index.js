@@ -25,8 +25,10 @@ import {
 } from "./styles";
 import { database } from "../../config/firebase";
 
+
+
 const List = () => {
-  const { name } = useContext(AuthContex);
+  const { name, logout } = useContext(AuthContex);
 
   const navigation = useNavigation();
   const [tasks, setTasks] = useState([]);
@@ -63,7 +65,6 @@ const List = () => {
     getUser();
   }, [update]);
 
-  console.log(tasks.map(e=> e.id))
 
   const renderItemOpen = ({ item }) =>
     item.activedb && (
@@ -155,8 +156,8 @@ const List = () => {
         ></ButtonComponent>
         <ButtonComponent
         m='15px'
-          onPress={() => navigation.navigate("Home")}
-          text="Voltar"
+          onPress={logout}
+          text="Sair"
         ></ButtonComponent>
       </Container>
     </BackgroundLinear>

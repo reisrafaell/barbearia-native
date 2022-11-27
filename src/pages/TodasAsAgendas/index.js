@@ -30,18 +30,17 @@ const ScheduleAll = () => {
   const [dateSelected, setDateSelected] = useState("segunda");
   const [hourSelected, setHourSelected] = useState("");
   const [atualDate, setAtualDate] = useState("");
-  const [idDoc, setIdDoc] = useState("");
+  const [update, setUpdate] = useState(true);
 
-  const [nameCliente, setName] = useState();
 
-  const UpdateTask = async () => {
-    const docRef = doc(database, "Agenda", idDoc);
+
+  const UpdateTask = async (id, state) => {
+    
+    const docRef = doc(database, "Agenda", id);
     await updateDoc(docRef, {
-      dia: dateSelected,
-      hora: hourSelected,
-      id: idDoc,
-      selecionado: true,
+      selecionado: state,
     });
+    setUpdate(!true)
   };
 
   useEffect(() => {
@@ -64,34 +63,17 @@ const ScheduleAll = () => {
     };
     getAgenda();
     getUser();
-  }, []);
+  }, [update]);
 
-  const handleSubmit = async () => {
-    if (dateSelected && nameCliente && services && hourSelected) {
-      UpdateTask();
-      const newUser = await addDoc(userCollection, {
-        idClientedb: name,
-        namedb: nameCliente,
-        activedb: true,
-        datedb: dateSelected,
-        hourDb: hourSelected,
-        atualDate: atualDate / mes,
-        cortedb: services.corte,
-        barbadb: services.barba,
-        sombrancelhadb: services.sombrancelha,
-        limpezadb: services.limpeza,
-      });
-      alert("Agenda Cadastrada!");
-      navigation.navigate("Home");
-    } else {
-      alert("Preencha todos os campos!");
-    }
+  const handleSubmit = () => {
+    agenda.map((e) => UpdateTask(e.id, false));
+  };
+  const handleClose = () => {
+    agenda.map((e) => UpdateTask(e.id, true));
   };
 
   return (
     <BackgroundLinear>
-     
-
       <S.Container>
         <S.TitleComponet>Quadro de Horários</S.TitleComponet>
 
@@ -99,114 +81,113 @@ const ScheduleAll = () => {
           <Icon name="arrow-left" size={30} color="#fff" />
           <S.TextComponet color="#fff">Voltar </S.TextComponet>
         </S.Button>
-     
+
         <S.DateTimePickerModal display>
-    
-        <S.TextHeader>
-          Semana Referência: {atualDate}/{mes}{" "}
-        </S.TextHeader>
-      
+          <S.TextHeader>
+            Semana Referência: {atualDate}/{mes}{" "}
+          </S.TextHeader>
 
-        <S.ContainerButtons>
-          <S.ButtonHandle
-            onPress={() => setDateSelected("segunda")}
-            selected={dateSelected == "segunda" ? true : false}
-          >
-            <S.TextButtonServices>Segunda</S.TextButtonServices>
-          </S.ButtonHandle>
-          <S.ButtonHandle
-            onPress={() => setDateSelected("quarta")}
-            selected={dateSelected == "quarta" ? true : false}
-          >
-            <S.TextButtonServices>Quarta</S.TextButtonServices>
-          </S.ButtonHandle>
-          <S.ButtonHandle
-            onPress={() => setDateSelected("sexta")}
-            selected={dateSelected == "sexta" ? true : false}
-          >
-            <S.TextButtonServices>Sexta</S.TextButtonServices>
-          </S.ButtonHandle>
-        </S.ContainerButtons>
+          <S.ContainerButtons>
+            <S.ButtonHandle
+              onPress={() => setDateSelected("segunda")}
+              selected={dateSelected == "segunda" ? true : false}
+            >
+              <S.TextButtonServices>Segunda</S.TextButtonServices>
+            </S.ButtonHandle>
+            <S.ButtonHandle
+              onPress={() => setDateSelected("quarta")}
+              selected={dateSelected == "quarta" ? true : false}
+            >
+              <S.TextButtonServices>Quarta</S.TextButtonServices>
+            </S.ButtonHandle>
+            <S.ButtonHandle
+              onPress={() => setDateSelected("sexta")}
+              selected={dateSelected == "sexta" ? true : false}
+            >
+              <S.TextButtonServices>Sexta</S.TextButtonServices>
+            </S.ButtonHandle>
+          </S.ContainerButtons>
 
-        {dateSelected === "segunda" ? (
-          <S.ContainerHours>
-            {agenda.map(
-              (value, id) =>
-                value.dia === "segunda" &&
-                (value.selecionado ? (
-                  <S.ButtonServicesSecondary key={id}>
-                    <S.TextButtonServices>{value.hora}</S.TextButtonServices>
-                    <S.TextButtonServices>Reservado</S.TextButtonServices>
-                  </S.ButtonServicesSecondary>
-                ) : (
-                  <S.ButtonServices
-                    key={id}
-                    onPress={() => {
-                    
-                      setIdDoc(value.id);
-                    }}
-                    selected={hourSelected === value.hora ? true : false}
-                  >
-                    <S.TextButtonServices>{value.hora}</S.TextButtonServices>
-                    <S.TextButtonServices>Disponível</S.TextButtonServices>
-                  </S.ButtonServices>
-                ))
-            )}
-          </S.ContainerHours>
-        ) : dateSelected == "quarta" ? (
-          <S.ContainerHours>
-            {agenda.map(
-              (value, id) =>
-                value.dia === "quarta" &&
-                (value.selecionado ? (
-                  <S.ButtonServicesSecondary key={id}>
-                    <S.TextButtonServices>{value.hora}</S.TextButtonServices>
-                    <S.TextButtonServices>Reservado</S.TextButtonServices>
-                  </S.ButtonServicesSecondary>
-                ) : (
-                  <S.ButtonServices
-                    key={id}
-                    onPress={() => {
-                    
-                      setIdDoc(value.id);
-                    }}
-                    selected={hourSelected === value.hora ? true : false}
-                  >
-                    <S.TextButtonServices>{value.hora}</S.TextButtonServices>
-                    <S.TextButtonServices>Disponível</S.TextButtonServices>
-                  </S.ButtonServices>
-                ))
-            )}
-          </S.ContainerHours>
-        ) : (
-          <S.ContainerHours>
-            {agenda.map(
-              (value, id) =>
-                value.dia === "sexta" &&
-                (value.selecionado ? (
-                  <S.ButtonServicesSecondary key={id}>
-                    <S.TextButtonServices>{value.hora}</S.TextButtonServices>
-                    <S.TextButtonServices>Reservado</S.TextButtonServices>
-                  </S.ButtonServicesSecondary>
-                ) : (
-                  <S.ButtonServices
-                    key={id}
-                    onPress={() => {
-                    
-                      setIdDoc(value.id);
-                    }}
-                    selected={hourSelected === value.hora ? true : false}
-                  >
-                    <S.TextButtonServices>{value.hora}</S.TextButtonServices>
-                    <S.TextButtonServices>Disponível</S.TextButtonServices>
-                  </S.ButtonServices>
-                ))
-            )}
-          </S.ContainerHours>
-        )}
-     
-      </S.DateTimePickerModal>
-        
+          {dateSelected === "segunda" ? (
+            <S.ContainerHours>
+              {agenda.map(
+                (value, id) =>
+                  value.dia === "segunda" &&
+                  (value.selecionado ? (
+                    <S.ButtonServicesSecondary key={id}>
+                      <S.TextButtonServices>{value.hora}</S.TextButtonServices>
+                      <S.TextButtonServices>Reservado</S.TextButtonServices>
+                    </S.ButtonServicesSecondary>
+                  ) : (
+                    <S.ButtonServices
+                      key={id}
+                      onPress={() => {
+                        
+                      }}
+                      selected={hourSelected === value.hora ? true : false}
+                    >
+                      <S.TextButtonServices>{value.hora}</S.TextButtonServices>
+                      <S.TextButtonServices>Disponível</S.TextButtonServices>
+                    </S.ButtonServices>
+                  ))
+              )}
+            </S.ContainerHours>
+          ) : dateSelected == "quarta" ? (
+            <S.ContainerHours>
+              {agenda.map(
+                (value, id) =>
+                  value.dia === "quarta" &&
+                  (value.selecionado ? (
+                    <S.ButtonServicesSecondary key={id}>
+                      <S.TextButtonServices>{value.hora}</S.TextButtonServices>
+                      <S.TextButtonServices>Reservado</S.TextButtonServices>
+                    </S.ButtonServicesSecondary>
+                  ) : (
+                    <S.ButtonServices
+                      key={id}
+                      onPress={() => {
+                      
+                      }}
+                      selected={hourSelected === value.hora ? true : false}
+                    >
+                      <S.TextButtonServices>{value.hora}</S.TextButtonServices>
+                      <S.TextButtonServices>Disponível</S.TextButtonServices>
+                    </S.ButtonServices>
+                  ))
+              )}
+            </S.ContainerHours>
+          ) : (
+            <S.ContainerHours>
+              {agenda.map(
+                (value, id) =>
+                  value.dia === "sexta" &&
+                  (value.selecionado ? (
+                    <S.ButtonServicesSecondary key={id}>
+                      <S.TextButtonServices>{value.hora}</S.TextButtonServices>
+                      <S.TextButtonServices>Reservado</S.TextButtonServices>
+                    </S.ButtonServicesSecondary>
+                  ) : (
+                    <S.ButtonServices
+                      key={id}
+                      onPress={() => {
+                   
+                      }}
+                      selected={hourSelected === value.hora ? true : false}
+                    >
+                      <S.TextButtonServices>{value.hora}</S.TextButtonServices>
+                      <S.TextButtonServices>Disponível</S.TextButtonServices>
+                    </S.ButtonServices>
+                  ))
+              )}
+            </S.ContainerHours>
+          )}
+          <S.ButtonHandle onPress={handleSubmit}>
+            <S.TextButtonServices>Liberar Agenda</S.TextButtonServices>
+          </S.ButtonHandle>
+          <S.ButtonHandle onPress={handleClose}>
+            <S.TextButtonServices>Trancar Agenda</S.TextButtonServices>
+          </S.ButtonHandle>
+        </S.DateTimePickerModal>
       </S.Container>
     </BackgroundLinear>
   );

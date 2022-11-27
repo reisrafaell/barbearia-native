@@ -54,7 +54,7 @@ width: 95%;
 `;
 
 export const Content = styled.View`
-  height: 300px;
+  min-height: 320px;
   width: 100%;
   display: flex;
   justify-content: center;

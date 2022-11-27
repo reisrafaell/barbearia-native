@@ -18,7 +18,7 @@ import {
 } from "./styles";
 import { database } from "../../config/firebase";
 
-const List = () => {
+const MyList = () => {
   const { name } = useContext(AuthContex);
 
   const navigation = useNavigation();
@@ -81,4 +81,4 @@ const List = () => {
   );
 };
 
-export default List;
+export default MyList;

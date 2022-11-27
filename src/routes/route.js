@@ -23,6 +23,7 @@ const Route = () => {
     <NavigationContainer>
       <AuthProvider>
         <Stack.Navigator>
+      
           <Stack.Screen
             name="Main"
             options={{
@@ -52,6 +53,20 @@ const Route = () => {
             }}
             component={List}
           />
+            <Stack.Screen
+            name="Schedule"
+            options={{
+              headerShown: false,
+            }}
+            component={Schedule}
+          />
+            <Stack.Screen
+            name="ScheduleAll"
+            options={{
+              headerShown: false,
+            }}
+            component={ScheduleAll}
+          />
 
           <Stack.Screen
             name="MyList"
@@ -61,13 +76,7 @@ const Route = () => {
             component={MyList}
           />
 
-          <Stack.Screen
-            name="Schedule"
-            options={{
-              headerShown: false,
-            }}
-            component={Schedule}
-          />
+         
           <Stack.Screen
             name="LoginSecondary"
             options={{
@@ -83,13 +92,7 @@ const Route = () => {
             }}
             component={Home}
           />
-          <Stack.Screen
-            name="ScheduleAll"
-            options={{
-              headerShown: false,
-            }}
-            component={ScheduleAll}
-          />
+          
 
           <Stack.Screen
             name="Reset"

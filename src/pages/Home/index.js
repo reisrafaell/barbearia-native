@@ -24,7 +24,7 @@ import { AuthContex } from "../../contexts/auth";
 const Home = () => {
   const navigation = useNavigation();
 
-  const { handleServices } = useContext(AuthContex);
+  const { handleServices, logout } = useContext(AuthContex);
   const [corte, setCorte] = useState(false);
   const [limpeza, setLimpeza] = useState(false);
   const [sombrancelha, setSombrancelha] = useState(false);
@@ -112,7 +112,7 @@ const Home = () => {
         </Content>
 
         <TabBottom>
-          <Button  onPress={() => navigation.navigate("Login")}>
+          <Button  onPress={logout}>
             <Icon2 name="exit-to-app" size={40} color="#fff" />
           </Button>
           <ContentBotton>

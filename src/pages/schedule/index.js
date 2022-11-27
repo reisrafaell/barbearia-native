@@ -75,7 +75,7 @@ const Schedule = () => {
         activedb: true,
         datedb: dateSelected,
         hourDb: hourSelected,
-        atualDate: atualDate / mes,
+        atualDate: `${atualDate}/${mes}`,
         cortedb: services.corte,
         barbadb: services.barba,
         sombrancelhadb: services.sombrancelha,
@@ -85,6 +85,12 @@ const Schedule = () => {
       navigation.navigate("Home");
     } else {
       alert("Preencha todos os campos!");
+    }
+  };
+
+  const handleConfirm = () => {
+    if (hourSelected) {
+      setDatePickerVisibility(!true);
     }
   };
 
@@ -200,11 +206,7 @@ const Schedule = () => {
           </S.ContainerHours>
         )}
 
-        <S.ButtonHandle
-          onPress={() => {
-            setDatePickerVisibility(!true);
-          }}
-        >
+        <S.ButtonHandle onPress={handleConfirm}>
           <S.TextButtonServices>Confirmar</S.TextButtonServices>
         </S.ButtonHandle>
       </S.DateTimePickerModal>
@@ -227,14 +229,30 @@ const Schedule = () => {
               <S.TextHeader>Serviços selecionados</S.TextHeader>
               <Icon name="arrow-down" size={20} color="#fff" />
             </S.ContentHeader>
-            {services.corte && <S.TextServices>Corte Masculino</S.TextServices>}
+            {services.corte && (
+              <S.TextV>
+                <S.TextServices>Corte Masculino </S.TextServices>
+                <S.TextServices> R$: 40,00</S.TextServices>
+              </S.TextV>
+            )}
             {services.limpeza && (
-              <S.TextServices>Limpeza de Rosto</S.TextServices>
+              <S.TextV>
+                <S.TextServices>Limpeza de Rosto </S.TextServices>
+                <S.TextServices> R$: 60,00</S.TextServices>
+              </S.TextV>
             )}
             {services.sombrancelha && (
-              <S.TextServices>Sombrancelha </S.TextServices>
+              <S.TextV>
+                <S.TextServices>Sombrancelha </S.TextServices>
+                <S.TextServices> R$: 20,00</S.TextServices>
+              </S.TextV>
             )}
-            {services.barba && <S.TextServices>Barba </S.TextServices>}
+            {services.barba && (
+              <S.TextV>
+                <S.TextServices>Barba </S.TextServices>
+                <S.TextServices> R$: 25,00</S.TextServices>
+              </S.TextV>
+            )}
           </S.ContentMainServices>
           <S.ContentMain>
             <S.Text>Nome do cliente</S.Text>

@@ -100,7 +100,7 @@ export const ButtonHandle = styled.TouchableOpacity`
   background-color: ${(props) => (props.selected ? "#4dc6fa" : "#106D95")};
   padding: 10px;
   border-radius: 10px;
-  margin: 30px 0 20px;
+  margin: 15px 0 20px;
   min-width: 110px;
   display: flex;
   justify-content: center;

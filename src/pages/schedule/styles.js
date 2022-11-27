@@ -97,6 +97,13 @@ export const TabBottom = styled.View`
 
   background-color: #106d95;
 `;
+export const TextV = styled.View`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%; 
+
+`;
 
 export const ButtonHandle = styled.TouchableOpacity`
   background-color: #106d95;
