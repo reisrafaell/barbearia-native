@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { BackgroundLinear } from "./gradient";
-import ButtonComponent from "../../components/button";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Icon2 from "react-native-vector-icons/MaterialCommunityIcons";
 import {
@@ -37,8 +36,7 @@ const Home = () => {
     barba: false,
   });
 
-  useEffect(() => {
-  }, [corte, limpeza, sombrancelha, barba]);
+
 
   const handleSubmit = () => {
     handleServices(services);
@@ -120,7 +118,7 @@ const Home = () => {
           <ContentBotton>
             <ImageComponetBotton source={require("../../assets/agenda.png")} />
           </ContentBotton>
-          <Button  onPress={() => navigation.navigate("List")}>
+          <Button  onPress={() => navigation.navigate("MyList")}>
             <Icon name="list" size={30} color="#fff" />
           </Button>
         </TabBottom>

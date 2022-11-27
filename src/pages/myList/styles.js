@@ -21,7 +21,6 @@ export const DuoButtonContainer = styled.View`
 export const ButtonComponet = styled.TouchableOpacity`
   width: 50%;
   height: 50px; 
-  margin-top: 15px;
   color: #fff;
   font-size: 16px;
   background-color: ${props=> props.active ? '#106D95': "#4DC6FA"}; 
@@ -50,11 +49,12 @@ export const TextComponet = styled.Text`
 `;
 
 export const Slider = styled.FlatList`
-width: 95%;
+width: 90%;
+margin: 10px;
 `;
 
 export const Content = styled.View`
-  height: 300px;
+  height: 230px;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -65,19 +65,5 @@ export const Content = styled.View`
   padding: 30px;
 `;
 export const ContentItem = styled.View`
-
-`;
-
-export const ButtonComponetClose = styled.TouchableOpacity`
-  width: 100%;
-  margin-top: 10px;
-  height: 40px; 
-  color: #fff;
-  border-radius: 5px;
-  font-size: 16px;
-  background-color: ${props=> props.active ? '#32CD32': "#FF0000"}; 
-  display: flex;
-  justify-content: center;
-  align-items: center;
 
 `;

@@ -13,21 +13,16 @@ import SendEmail from "../pages/sendEmail";
 import AuthProvider from "../contexts/auth";
 import Schedule from "../pages/schedule";
 import List from "../pages/list";
+import MyList from "../pages/myList";
 import Main from "../pages/main";
 import LoginSecondary from "../pages/LoginSecondary";
+import ScheduleAll from "../pages/TodasAsAgendas";
 
 const Route = () => {
   return (
     <NavigationContainer>
       <AuthProvider>
         <Stack.Navigator>
-        <Stack.Screen
-            name="Schedule"
-            options={{
-              headerShown: false,
-            }}
-            component={Schedule}
-          />
           <Stack.Screen
             name="Main"
             options={{
@@ -37,14 +32,42 @@ const Route = () => {
           />
 
           <Stack.Screen
+            name="Registration"
+            options={{
+              headerShown: false,
+            }}
+            component={Registration}
+          />
+          <Stack.Screen
             name="Login"
             options={{
               headerShown: false,
             }}
             component={Login}
           />
-         
+          <Stack.Screen
+            name="List"
+            options={{
+              headerShown: false,
+            }}
+            component={List}
+          />
 
+          <Stack.Screen
+            name="MyList"
+            options={{
+              headerShown: false,
+            }}
+            component={MyList}
+          />
+
+          <Stack.Screen
+            name="Schedule"
+            options={{
+              headerShown: false,
+            }}
+            component={Schedule}
+          />
           <Stack.Screen
             name="LoginSecondary"
             options={{
@@ -60,22 +83,14 @@ const Route = () => {
             }}
             component={Home}
           />
-
           <Stack.Screen
-            name="List"
+            name="ScheduleAll"
             options={{
               headerShown: false,
             }}
-            component={List}
+            component={ScheduleAll}
           />
 
-          <Stack.Screen
-            name="Registration"
-            options={{
-              headerShown: false,
-            }}
-            component={Registration}
-          />
           <Stack.Screen
             name="Reset"
             options={{

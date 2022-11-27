@@ -21,8 +21,8 @@ const Registration = () => {
   const [valid, setValid] = useState(false);
 
   const validEmail = () => {
-    const regex = RegExp(/[a-z-A-Z][@][a-z]*\.[a-z]{3}/);
-    const regexTest = regex.test(email);
+    const regex = RegExp(/^[a-z0-9.]+@[a-z0-9]+\.[a-z]+\.([a-z]+)?$/i);
+    const regexTest = regex.test(emailOne);
 
     if (regexTest) {
       setValid(true);
@@ -38,13 +38,22 @@ const Registration = () => {
     );
   };
 
-  const handleSubmit=()=>{
-    if( emailOne === email){
-      createUser()
-    }else{
-      alert('Os campos não conferem.')
+  const handleSubmit = () => {
+    if (emailOne && email && password) {
+      if (valid && emailOne === email) {
+        createUser();
+      } else {
+        if (!valid) {
+          alert("Formato de email inválido");
+        }
+        if (emailOne !== email) {
+          alert("Os campos não conferem.");
+        }
+      }
+    } else {
+      alert("Preencha os campos!");
     }
-  }
+  };
 
   return (
     <BackgroundLinear>
@@ -56,14 +65,14 @@ const Registration = () => {
         <InputComponent
           type="text"
           label="Email"
-          onBlur={validEmail}
+         
           placeholder="email@email.com"
           onChangeText={(value) => setEmailOne(value)}
         />
         <InputComponent
           type="text"
           label="Confirme o Email"
-          onBlur={validEmail}
+          
           placeholder="email@email.com"
           onChangeText={(value) => setEmail(value)}
         />

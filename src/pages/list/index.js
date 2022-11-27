@@ -4,7 +4,13 @@ import { BackgroundLinear } from "../Home/gradient";
 import { useNavigation } from "@react-navigation/native";
 import ButtonComponent from "../../components/button/index";
 import { AuthContex } from "../../contexts/auth";
-import { collection, getDocs } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  updateDoc,
+  doc,
+} from "firebase/firestore";
 
 import {
   Container,
@@ -15,6 +21,7 @@ import {
   Content,
   DuoButtonContainer,
   ButtonComponet,
+  ButtonComponetClose,
 } from "./styles";
 import { database } from "../../config/firebase";
 
@@ -24,6 +31,7 @@ const List = () => {
   const navigation = useNavigation();
   const [tasks, setTasks] = useState([]);
   const [activeLeft, setActiveLeft] = useState(true);
+  const [update, setUpdate] = useState(false);
   const [activeRight, setActiveRight] = useState();
 
   const userCollection = collection(database, "Tasks");
@@ -38,6 +46,14 @@ const List = () => {
     }
   };
 
+  const UpdateTask = async (id) => {
+    setUpdate(!false)
+    const docRef = doc(database, "Tasks", id);
+    await updateDoc(docRef, {     
+      activedb: false,
+    });
+  };
+
   useEffect(() => {
     const getUser = async () => {
       const data = await getDocs(userCollection);
@@ -45,12 +61,17 @@ const List = () => {
       setTasks(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     };
     getUser();
-  }, []);
+  }, [update]);
 
-  const renderItem = ({ item }) =>
-    item.idClientedb === name && (
+  console.log(tasks.map(e=> e.id))
+
+  const renderItemOpen = ({ item }) =>
+    item.activedb && (
       <Content {...item}>
         <ImageComponet source={require("../../assets/icon.png")} />
+        <TextComponet>Semana Referência: {item.atualDate}</TextComponet>
+        <TextComponet>Dia da semana: {item.datedb}</TextComponet>
+        <TextComponet>Hora: {item.hourDb}</TextComponet>
         {item.namedb && <TextComponet>Cliente: {item.namedb}</TextComponet>}
         {item.activedb ? (
           <TextComponet>Status: Aberto</TextComponet>
@@ -62,7 +83,33 @@ const List = () => {
         {item.limpezadb && <TextComponet>Limpeza</TextComponet>}
         {item.sombrancelhadb && <TextComponet>Sombrancela</TextComponet>}
         {item.cortedb && <TextComponet>Corte</TextComponet>}
-        <TextComponet>Data: {item.datedb}</TextComponet>
+        <ButtonComponetClose onPress={()=> UpdateTask(item.id)}>
+          <TextComponet>Fechar</TextComponet>
+        </ButtonComponetClose>
+      </Content>
+    );
+
+  const renderItemClose = ({ item }) =>
+    !item.activedb && (
+      <Content {...item}>
+        <ImageComponet source={require("../../assets/icon.png")} />
+        <TextComponet>Semana Referência: {item.atualDate}</TextComponet>
+        <TextComponet>Dia da semana: {item.datedb}</TextComponet>
+        <TextComponet>Hora: {item.hourDb}</TextComponet>
+        {item.namedb && <TextComponet>Cliente: {item.namedb}</TextComponet>}
+        {item.activedb ? (
+          <TextComponet>Status: Aberto</TextComponet>
+        ) : (
+          <TextComponet>Status: Fechado</TextComponet>
+        )}
+        <TextComponet>Serviços:</TextComponet>
+        {item.barbadb && <TextComponet>Barba</TextComponet>}
+        {item.limpezadb && <TextComponet>Limpeza</TextComponet>}
+        {item.sombrancelhadb && <TextComponet>Sombrancela</TextComponet>}
+        {item.cortedb && <TextComponet>Corte</TextComponet>}
+        <ButtonComponetClose active onPress={()=> UpdateTask(item.id)}>
+          <TextComponet>Concluído</TextComponet>
+        </ButtonComponetClose>
       </Content>
     );
 
@@ -74,20 +121,21 @@ const List = () => {
           <ButtonComponet
             active={activeLeft}
             onPress={() => handleActive("left")}
-          ><TextComponet>Abertos</TextComponet>
+          >
+            <TextComponet>Abertos</TextComponet>
           </ButtonComponet>
           <ButtonComponet
             active={activeRight}
             onPress={() => handleActive("right")}
           >
-            <TextComponet>Fechado</TextComponet>
+            <TextComponet>Fechados</TextComponet>
           </ButtonComponet>
         </DuoButtonContainer>
         {activeLeft ? (
           <>
             <Slider
               data={tasks}
-              renderItem={renderItem}
+              renderItem={renderItemOpen}
               keyExtractor={(item) => item.id}
             />
           </>
@@ -95,13 +143,18 @@ const List = () => {
           <>
             <Slider
               data={tasks}
-              renderItem={renderItem}
+              renderItem={renderItemClose}
               keyExtractor={(item) => item.id}
             />
           </>
         )}
 
         <ButtonComponent
+          onPress={() => navigation.navigate("ScheduleAll")}
+          text="Quadro de Horários"
+        ></ButtonComponent>
+        <ButtonComponent
+        m='15px'
           onPress={() => navigation.navigate("Home")}
           text="Voltar"
         ></ButtonComponent>
