@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Icon from "react-native-vector-icons/FontAwesome";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useContext } from "react/cjs/react.development";
 import { BackgroundLinear } from "../Home/gradient";
 import { useNavigation } from "@react-navigation/native";
@@ -28,6 +28,19 @@ const Login = () => {
     loginUser(email, password);
   };
 
+  useEffect(() => {
+    const handleShowValues = async () => {
+      const valueUser = await AsyncStorage.getItem("email");
+      const valuePassword = await AsyncStorage.getItem("password");
+      if (valuePassword && valueUser) {
+        setEmail(valueUser);
+        setPassword(valuePassword);
+      }
+    };
+    handleShowValues();
+  });
+
+
   return (
     <BackgroundLinear>
       <Container>
@@ -47,6 +60,7 @@ const Login = () => {
 
         <InputComponent
           showError={error}
+          value={email}
           onChangeText={(value) => setEmail(value)}
           type="text"
           label="Email"
@@ -54,6 +68,7 @@ const Login = () => {
         ></InputComponent>
         <InputComponent
           showError={error}
+          value={password}
           onChangeText={(value) => setPassword(value)}
           type="password"
           label="Senha"
