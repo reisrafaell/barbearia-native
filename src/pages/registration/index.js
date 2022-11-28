@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { BackgroundLinear } from "../Home/gradient";
 import { useNavigation } from "@react-navigation/native";
@@ -38,17 +38,17 @@ const Registration = () => {
     );
   };
 
+  useEffect(() => {
+    validEmail();
+  }, [emailOne, email]);
+
   const handleSubmit = () => {
     if (emailOne && email && password) {
-      if (valid && emailOne === email) {
+      if (emailOne === email) {
         createUser();
+        navigation.navigate("Login")
       } else {
-        if (!valid) {
-          alert("Formato de email inválido");
-        }
-        if (emailOne !== email) {
-          alert("Os campos não conferem.");
-        }
+        alert("Os campos não conferem.");
       }
     } else {
       alert("Preencha os campos!");
@@ -65,14 +65,12 @@ const Registration = () => {
         <InputComponent
           type="text"
           label="Email"
-         
           placeholder="email@email.com"
           onChangeText={(value) => setEmailOne(value)}
         />
         <InputComponent
           type="text"
           label="Confirme o Email"
-          
           placeholder="email@email.com"
           onChangeText={(value) => setEmail(value)}
         />

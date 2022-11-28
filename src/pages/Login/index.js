@@ -14,7 +14,7 @@ import {
   ImageComponet,
   TextComponet,
   TitleComponet,
-  Button
+  Button,
 } from "./styles";
 
 const Login = () => {
@@ -28,28 +28,16 @@ const Login = () => {
     loginUser(email, password);
   };
 
-  useEffect(() => {
-    const handleShowValues = async () => {
-      const valueUser = await AsyncStorage.getItem("email");
-      const valuePassword = await AsyncStorage.getItem("password");
-      if (valuePassword && valueUser) {
-        setEmail(valueUser);
-        setPassword(valuePassword);
-     
-      }
-    };
-    handleShowValues();
-  });
-
-
   return (
     <BackgroundLinear>
       <Container>
-      <Button onPress={() => navigation.navigate("Main")}>
-          <Icon name="arrow-left" size={30} color="#fff"  />
-          <TextComponet m={'10px'} mb={'0'}>Voltar </TextComponet>
+        <Button onPress={() => navigation.navigate("Main")}>
+          <Icon name="arrow-left" size={30} color="#fff" />
+          <TextComponet m={"10px"} mb={"0"}>
+            Voltar{" "}
+          </TextComponet>
         </Button>
-        
+
         <ImageComponet source={require("../../assets/logo.png")} />
         <TitleComponet>Barbearia Rei Do Corte</TitleComponet>
         <TextComponet>Já é cliente ? Faça Login</TextComponet>
@@ -61,7 +49,6 @@ const Login = () => {
 
         <InputComponent
           showError={error}
-          value={email}
           onChangeText={(value) => setEmail(value)}
           type="text"
           label="Email"
@@ -69,7 +56,6 @@ const Login = () => {
         ></InputComponent>
         <InputComponent
           showError={error}
-          value={password}
           onChangeText={(value) => setPassword(value)}
           type="password"
           label="Senha"
