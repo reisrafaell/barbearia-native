@@ -34,6 +34,7 @@ const Registration = () => {
     await createUserWithEmailAndPassword(auth, email, password).then(
       (value) => {
         alert("Cadastrado com sucesso!");
+        navigation.navigate("Login")
       }
     );
   };
@@ -46,7 +47,6 @@ const Registration = () => {
     if (emailOne && email && password) {
       if (emailOne === email) {
         createUser();
-        navigation.navigate("Login")
       } else {
         alert("Os campos não conferem.");
       }
